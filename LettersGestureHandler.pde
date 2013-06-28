@@ -67,7 +67,7 @@ class LettersGestureHandler {
     v_middle = new PVector(HAND_MIDDLE[0], HAND_MIDDLE[1]);
     
     // direction de v_thumb par rapport à v_middle
-    v_thumb = new PVector(FINGER_THUMB[0]-HAND_MIDDLE[0], FINGER_THUMB[1]-HAND_MIDDLE[1];
+    v_thumb = new PVector(FINGER_THUMB[0]-HAND_MIDDLE[0], FINGER_THUMB[1]-HAND_MIDDLE[1]);
     
     float a  = PVector.angleBetween(v_middle, v_thumb);
     

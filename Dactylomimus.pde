@@ -69,7 +69,7 @@ void draw() {
   
   ////////////////////////////////////////////////////////////////// LA SCENE DU MENU //////////////////////////////////////////////////////////////////
   
-  if (scene == 0)
+  if (scene == 1)
   {
     fill(0);
     
@@ -91,18 +91,18 @@ void draw() {
       if (gdata.label == PXCMGesture.Gesture.LABEL_POSE_THUMB_UP)
       {
         scene = 1;
-        print ('scene : '+scene+'\n');
+        print ("scene : "+scene+'\n');
       }
       else if (gdata.label == PXCMGesture.Gesture.LABEL_POSE_THUMB_DOWN)
       {
         scene = 2;
-        print ('scene : '+scene+'\n');
+        print ("scene : "+scene+'\n');
       }
     }
     
     ////////////////////////////////////////////////////////////////// LA SCENE D'APPRENTISSAGE DE L'ALPHABET //////////////////////////////////////////////////////////////////
     
-  } else if (scene == 1)
+  } else if (scene == 0)
   {
     
     // découpage de la page en 3 parties : à gauche la lettre / le mot / l'expression ; en haut à droite la représentation du signe à reproduire ; et en bas à droite la vidéo "gesture"
