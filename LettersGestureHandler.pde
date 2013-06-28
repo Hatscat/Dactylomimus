@@ -24,31 +24,31 @@ class LettersGestureHandler {
       HAND_MIDDLE[1] = ndata.positionImage.y;
       print ("HAND\n");
     }
-    if (pp.QueryGeoNode(PXCMGesture.GeoNode.LABEL_FINGER_THUMB, ndata))
+    if (pp.QueryGeoNode(PXCMGesture.GeoNode.LABEL_BODY_HAND_PRIMARY|PXCMGesture.GeoNode.LABEL_FINGER_THUMB, ndata))
     {
       FINGER_THUMB[0] = ndata.positionImage.x;
       FINGER_THUMB[1] = ndata.positionImage.y;
       print ("FINGER_THUMB\n");
     }
-    if (pp.QueryGeoNode(PXCMGesture.GeoNode.LABEL_FINGER_INDEX, ndata))
+    if (pp.QueryGeoNode(PXCMGesture.GeoNode.LABEL_BODY_HAND_PRIMARY|PXCMGesture.GeoNode.LABEL_FINGER_INDEX, ndata))
     {
       FINGER_INDEX[0] = ndata.positionImage.x;
       FINGER_INDEX[1] = ndata.positionImage.y;
       print ("FINGER_INDEX\n");
     }
-    if (pp.QueryGeoNode(PXCMGesture.GeoNode.LABEL_FINGER_MIDDLE, ndata))
+    if (pp.QueryGeoNode(PXCMGesture.GeoNode.LABEL_BODY_HAND_PRIMARY|PXCMGesture.GeoNode.LABEL_FINGER_MIDDLE, ndata))
     {
       FINGER_MIDDLE[0] = ndata.positionImage.x;
       FINGER_MIDDLE[1] = ndata.positionImage.y;
       print ("FINGER_MIDDLE\n");
     }
-    if (pp.QueryGeoNode(PXCMGesture.GeoNode.LABEL_FINGER_RING, ndata))
+    if (pp.QueryGeoNode(PXCMGesture.GeoNode.LABEL_BODY_HAND_PRIMARY|PXCMGesture.GeoNode.LABEL_FINGER_RING, ndata))
     {
       FINGER_RING[0] = ndata.positionImage.x;
       FINGER_RING[1] = ndata.positionImage.y;
       print ("FINGER_RING\n");
     }
-    if (pp.QueryGeoNode(PXCMGesture.GeoNode.LABEL_FINGER_PINKY, ndata))
+    if (pp.QueryGeoNode(PXCMGesture.GeoNode.LABEL_BODY_HAND_PRIMARY|PXCMGesture.GeoNode.LABEL_FINGER_PINKY, ndata))
     {
       FINGER_PINKY[0] = ndata.positionImage.x;
       FINGER_PINKY[1] = ndata.positionImage.y;
