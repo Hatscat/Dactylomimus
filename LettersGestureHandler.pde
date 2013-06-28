@@ -1,6 +1,6 @@
 class LettersGestureHandler {
 
-  public boolean[] letters = new boolean[26]; // les lettres de l'alphabet
+  public boolean[] letters = new boolean[26]; // les lettres de l'alphabet, reconnues "true", ou pas "false"
   
   private float[] HAND_MIDDLE = new float[2], FINGER_THUMB = new float[2], FINGER_INDEX = new float[2],
     FINGER_MIDDLE = new float[2], FINGER_RING = new float[2], FINGER_PINKY = new float[2]; // les positions x et y des doigts et du milieu de la main
@@ -59,7 +59,7 @@ class LettersGestureHandler {
     
     // puis deuxième étape : calculer les angles entre à partir des positions pour reconnaitre les signes
     
-    // et mettre à "true les signes reconnus --> i.e. "letters[0] = true;"
+    // et mettre à "true les signes reconnus --> i.e. "letters[0] = true;" utiliser PVector
   
   }
 
