@@ -9,7 +9,7 @@ class LettersGestureHandler {
     
     for (int i=0, c=letters.length; i<c; i++)
     {
-    letters[i] = false; // appel de la fonction = on réinitialise tout
+      letters[i] = false; // appel de la fonction = on réinitialise tout
     }
     
     PXCMGesture.GeoNode ndata = new PXCMGesture.GeoNode();
@@ -22,37 +22,37 @@ class LettersGestureHandler {
     {
       HAND_MIDDLE[0] = ndata.positionImage.x;
       HAND_MIDDLE[1] = ndata.positionImage.y;
-      print ("HAND\n");
+      //print ("HAND\n");
     }
     if (pp.QueryGeoNode(PXCMGesture.GeoNode.LABEL_BODY_HAND_PRIMARY|PXCMGesture.GeoNode.LABEL_FINGER_THUMB, ndata))
     {
       FINGER_THUMB[0] = ndata.positionImage.x;
       FINGER_THUMB[1] = ndata.positionImage.y;
-      print ("FINGER_THUMB\n");
+      //print ("FINGER_THUMB\n");
     }
     if (pp.QueryGeoNode(PXCMGesture.GeoNode.LABEL_BODY_HAND_PRIMARY|PXCMGesture.GeoNode.LABEL_FINGER_INDEX, ndata))
     {
       FINGER_INDEX[0] = ndata.positionImage.x;
       FINGER_INDEX[1] = ndata.positionImage.y;
-      print ("FINGER_INDEX\n");
+      //print ("FINGER_INDEX\n");
     }
     if (pp.QueryGeoNode(PXCMGesture.GeoNode.LABEL_BODY_HAND_PRIMARY|PXCMGesture.GeoNode.LABEL_FINGER_MIDDLE, ndata))
     {
       FINGER_MIDDLE[0] = ndata.positionImage.x;
       FINGER_MIDDLE[1] = ndata.positionImage.y;
-      print ("FINGER_MIDDLE\n");
+      //print ("FINGER_MIDDLE\n");
     }
     if (pp.QueryGeoNode(PXCMGesture.GeoNode.LABEL_BODY_HAND_PRIMARY|PXCMGesture.GeoNode.LABEL_FINGER_RING, ndata))
     {
       FINGER_RING[0] = ndata.positionImage.x;
       FINGER_RING[1] = ndata.positionImage.y;
-      print ("FINGER_RING\n");
+      //print ("FINGER_RING\n");
     }
     if (pp.QueryGeoNode(PXCMGesture.GeoNode.LABEL_BODY_HAND_PRIMARY|PXCMGesture.GeoNode.LABEL_FINGER_PINKY, ndata))
     {
       FINGER_PINKY[0] = ndata.positionImage.x;
       FINGER_PINKY[1] = ndata.positionImage.y;
-      print ("FINGER_PINKY\n");
+      //print ("FINGER_PINKY\n");
     }
     
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -60,6 +60,20 @@ class LettersGestureHandler {
     // puis deuxième étape : calculer les angles entre à partir des positions pour reconnaitre les signes
     
     // et mettre à "true les signes reconnus --> i.e. "letters[0] = true;" utiliser PVector
+    
+    PVector v_middle, v_thumb;
+    
+    // position de v_middle
+    v_middle = new PVector(HAND_MIDDLE[0], HAND_MIDDLE[1]);
+    
+    // direction de v_thumb par rapport à v_middle
+    v_thumb = new PVector(FINGER_THUMB[0]-HAND_MIDDLE[0], FINGER_THUMB[1]-HAND_MIDDLE[1];
+    
+    float a  = PVector.angleBetween(v_middle, v_thumb);
+    
+    println(degrees(a));
+  
+    /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   
   }
 
