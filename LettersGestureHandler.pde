@@ -61,20 +61,71 @@ class LettersGestureHandler {
     
     // et mettre à "true les signes reconnus --> i.e. "letters[0] = true;" utiliser PVector
     
-    PVector v_middle, v_thumb;
+    PVector v_hand_middle, v_thumb, v_index, v_middle, v_ring, v_pinky;
     
-    // position de v_middle
-    v_middle = new PVector(HAND_MIDDLE[0], HAND_MIDDLE[1]);
+    // position de v_hand_middle
+    v_hand_middle = new PVector(HAND_MIDDLE[0], HAND_MIDDLE[1]);
+    v_hand_middle.normalize();
     
-    // direction de v_thumb par rapport à v_middle
+    // direction de v_thumb par rapport à v_hand_middle
     v_thumb = new PVector(FINGER_THUMB[0]-HAND_MIDDLE[0], FINGER_THUMB[1]-HAND_MIDDLE[1]);
+    v_thumb.normalize();
     
-    float a  = PVector.angleBetween(v_middle, v_thumb);
+    // direction de v_index par rapport à v_hand_middle
+    v_index = new PVector(FINGER_INDEX[0]-HAND_MIDDLE[0], FINGER_INDEX[1]-HAND_MIDDLE[1]);
+    v_index.normalize();
     
-    println(degrees(a));
+    // direction de v_middle par rapport à v_hand_middle
+    v_middle = new PVector(FINGER_MIDDLE[0]-HAND_MIDDLE[0], FINGER_MIDDLE[1]-HAND_MIDDLE[1]);
+    v_middle.normalize();
+    
+    // direction de v_ring par rapport à v_hand_middle
+    v_ring = new PVector(FINGER_RING[0]-HAND_MIDDLE[0], FINGER_RING[1]-HAND_MIDDLE[1]);
+    v_ring.normalize();
+    
+    // direction de v_pinky par rapport à v_hand_middle
+    v_pinky = new PVector(FINGER_PINKY[0]-HAND_MIDDLE[0], FINGER_PINKY[1]-HAND_MIDDLE[1]);
+    v_pinky.normalize();
+    
+    // Angle entre le milieu de la main et le pouce
+    float angle_thumb  = degrees(PVector.angleBetween(v_hand_middle, v_thumb));
+    
+    // Angle entre le milieu de la main et l'index
+    float angle_index  = degrees(PVector.angleBetween(v_hand_middle, v_index));
+    
+    // Angle entre le milieu de la main et le majeur
+    float angle_middle  = degrees(PVector.angleBetween(v_hand_middle, v_middle));
+    
+    // Angle entre le milieu de la main et l'annulaire
+    float angle_ring  = degrees(PVector.angleBetween(v_hand_middle, v_ring));
+    
+    // Angle entre le milieu de la main et l'auriculaire
+    float angle_pinky  = degrees(PVector.angleBetween(v_hand_middle, v_pinky));
+    
+    //println(v_angle);
+    //println(" ");
+    //println( "T : " + angle_thumb + ", I :" + angle_index + ", M : " + angle_middle + ", R : " + angle_ring + ", P : " + angle_pinky);
   
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-  
+    
+    // reconnaissance du A
+    if (!pp.QueryGeoNode(PXCMGesture.GeoNode.LABEL_BODY_HAND_PRIMARY|PXCMGesture.GeoNode.LABEL_FINGER_INDEX, ndata) &&
+        !pp.QueryGeoNode(PXCMGesture.GeoNode.LABEL_BODY_HAND_PRIMARY|PXCMGesture.GeoNode.LABEL_FINGER_MIDDLE, ndata) &&
+        !pp.QueryGeoNode(PXCMGesture.GeoNode.LABEL_BODY_HAND_PRIMARY|PXCMGesture.GeoNode.LABEL_FINGER_RING, ndata) &&
+        !pp.QueryGeoNode(PXCMGesture.GeoNode.LABEL_BODY_HAND_PRIMARY|PXCMGesture.GeoNode.LABEL_FINGER_PINKY, ndata) &&
+        angle_thumb >= 0 && angle_thumb <= 45)
+    {
+      println("A");
+      // println(v_angle);
+    }
+    
+    // reconnaissance du B
+    if ((angle_thumb >= 140 && angle_thumb <= 160) &&
+        (angle_pinky >= 160 && angle_pinky <= 180))
+    {
+      println("B");
+    }
+    
   }
 
 }
