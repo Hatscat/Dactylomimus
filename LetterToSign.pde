@@ -115,7 +115,7 @@ class LetterToSign {
   
   public void Move () {
     
-    this.x += random(-1, 2);
+    this.x += random(-1, 1.1);
     
     this.y += this.speed;
 
