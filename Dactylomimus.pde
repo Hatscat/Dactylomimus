@@ -16,6 +16,7 @@ private ArrayList<LetterToSign> letters; // les lettres écrite à signer
 private PXCUPipeline pp; // la bibliothèque du SDK d'Intel
 private LettersGestureHandler gest; // la classe servant à reconnaitre des lettres signées
 private int letterToShow;
+private int seconds;
 private boolean wait;
 public int scene; // le numéro de la scène : '0' pour le menu, '1' pour l'apprentissage, '2' pour le jeu
 
@@ -90,6 +91,11 @@ void draw() {
   PXCMGesture.GeoNode ndata = new PXCMGesture.GeoNode();
   PXCMGesture.Gesture gdata = new PXCMGesture.Gesture();
   
+  LetterToSign letter = letters.get(0);
+  letter.Awake();
+  
+  seconds = second();
+  
   // la camera
   if (!pp.AcquireFrame(false)) return; // si la camera ne capte rien le programme n'attend pas et la frame s'arrête. (à remplacer par pp.AcquireFrame(true); si l'on souhaite qu'il bloque la frame et attende de capter quelque chose)
   
@@ -125,6 +131,7 @@ void draw() {
       {
         background(255);
         letterToShow = 0;
+        letter.letterNb = 0;
         scene = 1;
       }
       else if (gdata.label == PXCMGesture.Gesture.LABEL_POSE_PEACE)
@@ -141,13 +148,9 @@ void draw() {
     // découpage de la page en 3 parties : à gauche la lettre / le mot / l'expression ; en haut à droite la représentation du signe à reproduire ; et en bas à droite la vidéo gesture
     
 
-
-    LetterToSign letter = letters.get(0);
-    letter.Awake();
-
     // 1 : le texte
     textSize(300);
-    text(letter.letter, 200, 40); //letter.letter
+    text(letter.letter, 200, 30); //letter.letter
     
     // 2 : le signe à reproduire
     image(letterSignPictures[letterToShow], width - (letterSignPictures[letterToShow].width * 1.1), 50);
@@ -161,10 +164,10 @@ void draw() {
       
       fill (0, 200, 0);
       textSize(150);
-      text("Bravo !", 100, 300);
+      text("Bravo !", 100, 310);
     }
     
-    if (wait && second()%2 == 0)
+    if (wait && seconds%3 == 0)
     {
       wait = false;
       gest.letters[letterToShow] = false;
@@ -173,6 +176,9 @@ void draw() {
         letterToShow++;
         letter.letterNb++;
         background(255);
+      } else {
+        background(255);
+        scene = 0;
       }
     }
     
