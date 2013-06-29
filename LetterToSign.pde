@@ -1,5 +1,6 @@
 class LetterToSign {
   
+  public int letterNb;
   public String letter;
   public int x;
   public int y;
@@ -10,7 +11,17 @@ class LetterToSign {
   
   LetterToSign (int letterNb, int speed) {
     
-    switch (letterNb) {
+    this.letterNb = letterNb;
+    this.speed = speed;
+    
+  }
+  
+  
+  /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+  
+  public void Awake () {
+    
+    switch (this.letterNb) {
       case 0:
         this.letter = "A";
         break;
@@ -90,17 +101,6 @@ class LetterToSign {
         this.letter = "Z";
         break;
     }
-
-    this.speed = speed;
-    
-  }
-  
-  
-  /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-  
-  public void Awake () {
-    
-    
     
   }
   

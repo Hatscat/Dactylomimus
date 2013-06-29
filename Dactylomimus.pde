@@ -16,12 +16,14 @@ private ArrayList<LetterToSign> letters; // les lettres écrite à signer
 private PXCUPipeline pp; // la bibliothèque du SDK d'Intel
 private LettersGestureHandler gest; // la classe servant à reconnaitre des lettres signées
 private int letterToShow;
+private boolean wait;
 public int scene; // le numéro de la scène : '0' pour le menu, '1' pour l'apprentissage, '2' pour le jeu
 
   //////////////////////////////////////////////////////////////////
 
 void setup() {
   
+  frameRate(30);
   size(960, 600);
   background(255);
   /*
@@ -77,6 +79,7 @@ void setup() {
   
   letterToShow = 0;
   scene = 0;
+  wait = false;
   
 }
 
@@ -137,12 +140,17 @@ void draw() {
   {
     // découpage de la page en 3 parties : à gauche la lettre / le mot / l'expression ; en haut à droite la représentation du signe à reproduire ; et en bas à droite la vidéo gesture
     
+<<<<<<< HEAD
     // LetterToSign letter = letters.get(letterToShow);
     LetterToSign letter = letters.get(0);
     
+=======
+    LetterToSign letter = letters.get(0);
+    letter.Awake();
+>>>>>>> 871d2f82969bc09d953248122c800e14b6488ca8
     // 1 : le texte
     textSize(300);
-    text(letter.letter, 200, 50); //letter.letter
+    text(letter.letter, 200, 40); //letter.letter
     
     // 2 : le signe à reproduire
     image(letterSignPictures[letterToShow], width - (letterSignPictures[letterToShow].width * 1.1), 50);
@@ -152,15 +160,23 @@ void draw() {
     
     if (gest.letters[letterToShow])
     {
-      gest.letters[letterToShow] = false;
+      wait = true;
       
       fill (0, 200, 0);
       textSize(150);
-      text("Bravo !", 100, 200);
-      
-      letterToShow++;
-      
-      print("yep!\n");
+      text("Bravo !", 100, 300);
+    }
+    
+    if (wait && second()%2 == 0)
+    {
+      wait = false;
+      gest.letters[letterToShow] = false;
+      if (letterToShow < 25)
+      {
+        letterToShow++;
+        letter.letterNb++;
+        background(255);
+      }
     }
     
     if (pp.QueryGesture(PXCMGesture.GeoNode.LABEL_ANY, gdata))
@@ -193,4 +209,7 @@ void draw() {
   pp.ReleaseFrame();
 
 }
+  
+  //////////////////////////////////////////////////////////////////
+
 
