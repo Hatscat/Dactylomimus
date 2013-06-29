@@ -20,12 +20,14 @@ private int frame;
 private float difficulty;
 private boolean wait;
 public int scene; // le numéro de la scène : '0' pour le menu, '1' pour l'apprentissage, '2' pour le jeu
+public int score;
+public int highscore;
 
   //////////////////////////////////////////////////////////////////
 
 void setup() {
   
-  frameRate(15);
+  frameRate(20);
   size(960, 600);
 
   pp = new PXCUPipeline(this); 
@@ -77,8 +79,10 @@ void setup() {
   letterToShow = 0;
   scene = 0;
   wait = false;
-  difficulty = 64;
+  difficulty = 20;
   frame = 0;
+  score = 0;
+  highscore = 0;
   
 }
 
@@ -135,6 +139,10 @@ void draw() {
       else if (gdata.label == PXCMGesture.Gesture.LABEL_POSE_PEACE)
       {
         frame = 0;
+        for (int i = letters.size()-1; i >= 0; i--) {
+          letters.remove(i);
+        }
+        score = 0;
         scene = 2;
       }
     }
@@ -157,22 +165,24 @@ void draw() {
     if (gest.letters[letterToShow])
     {
       wait = true;
-      
-      fill (0, 200, 0);
-      textSize(150);
-      text("Bravo !", 100, 310);
     }
     
-    if (wait && frame%64 == 0)
-    {
-      wait = false;
-      gest.letters[letterToShow] = false;
-      if (letterToShow < 25)
+    if (wait)
+    {    
+      fill (0, 200, 0);
+      textSize(150);
+      text("Bravo !", 100, 320);
+      if (frame%45 == 0)
       {
-        letter.letterNb++;
-        letterToShow++;
-      } else {
-        scene = 0;
+        wait = false;
+        //gest.letters[letterToShow] = false;
+        if (letterToShow < 25)
+        {
+          letter.letterNb++;
+          letterToShow++;
+        } else {
+          scene = 0;
+        }
       }
     }
     
@@ -202,10 +212,29 @@ void draw() {
       
       if (letterClone.Finished()) {
         letters.remove(i);
-        println ("die!!!!!!!!!!!!!!!!!!!");
+        score++;
+        if (score > highscore)
+        {
+          highscore = score;
+        }
       }
       
+      if (letterClone.Lose()) {
+        letters.remove(i);
+        if (score > 0)
+        {
+          score--;
+        }
+      }
     }
+    
+    textAlign(CENTER, TOP);
+    textSize(110);
+    text(score, width*0.81, height*0.1);
+    
+    fill(200, 0, 0);
+    textSize(75);
+    text(highscore, width*0.81, height*0.4);
     
     if (pp.QueryGesture(PXCMGesture.GeoNode.LABEL_ANY, gdata))
     {
@@ -226,7 +255,7 @@ void draw() {
   //////////////////////////////////////////////////////////////////
 
 void InstantiateGameLetter() {
-  //difficulty ++;
+  difficulty = int(random(88, 90));
   letters.add(new LetterToSign(int(random(7))));
 }
 

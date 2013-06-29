@@ -2,9 +2,9 @@ class LetterToSign {
   
   public int letterNb;
   public String letter;
-  public int x;
-  public int y;
-  public int speed;
+  public float x;
+  public float y;
+  public float speed;
   private int size;
   private boolean isAwake = false;
   
@@ -105,11 +105,11 @@ class LetterToSign {
           break;
       }
       
-      this.x = int(random(0, width*0.55));
+      this.x = random(0, width*0.60);
       this.y = 0;
-      this.speed = int(random(1, 4));
+      this.speed = random(0.3, 2);
       
-      this.size = int(random(30, 60));
+      this.size = int(random(50, 71));
     }
   }
   
@@ -136,5 +136,13 @@ class LetterToSign {
    return false;
   }
   
+  public boolean Lose () {
+    
+    if (this.y > height)
+   {
+     return true;
+   }
+   return false;
+  }
   
 }
