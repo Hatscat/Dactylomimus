@@ -226,6 +226,12 @@ class LettersGestureHandler {
               println("I");
               letters[8] = true;
             }
+            // Reconnaissance du J
+            else if (angle_thumb >= 9 && angle_thumb <= 20 &&
+                     distance >= 23) {
+              println("J");
+              letters[9] = true;
+            }
           }
     }
     
@@ -251,7 +257,7 @@ class LettersGestureHandler {
             }
             // Reconnaissance du G
             else if (angle_index >= 110 && angle_index <= 140 &&
-                     distance < 5)
+                     distance <= 5)
             {
               println("G");
               letters[6] = true;
@@ -259,6 +265,13 @@ class LettersGestureHandler {
             // Reconnaissance du D
             else if (angle_index >= 145 && angle_index <= 175 &&
                      distance > 20)
+            {
+              println("D");
+              letters[3] = true;
+            }
+            // Reconnaissance du I
+            else if (angle_index >= 95 && angle_index <= 108 &&
+                     distance <= 5)
             {
               println("D");
               letters[3] = true;
@@ -319,6 +332,12 @@ class LettersGestureHandler {
               {
                 println("G");
                 letters[6] = true;
+              }
+              // Reconnaissance du I
+              else if (angle_ring >= 155 && angle_ring <= 175 && distance <= 5)
+              {
+                println("I");
+                letters[8] = true;
               }
             }
       }
@@ -383,6 +402,14 @@ class LettersGestureHandler {
             println("F");
             letters[5] = true;
           }
+      // Reconnaissance du J
+      else if ((angle_hand_upper >= 170 && angle_hand_upper <= 180) &&
+                (angle_hand_lower >= 0 && angle_hand_lower <= 5) &&
+                 distance >= 20)
+          {
+            println("J");
+            letters[9] = true;
+          }
     }
 
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -413,14 +440,14 @@ class LettersGestureHandler {
                   println("H");
                   letters[7] = true;
                 }
-            // Reconnaissance H
-            /*else if ((angle_thumb >= 140 && angle_thumb <= 170) &&
-                     (angle_index >= 40 && angle_index <= 70) &&
-                      distance > 15)
+            // Reconnaissance K
+            else if ((angle_thumb >= 85 && angle_thumb <= 120) &&
+                     (angle_index >= 120 && angle_index <= 140) &&
+                      distance >= 10)
                 {
-                  println("H");
-                  letters[7] = true;
-                }*/
+                  println("K");
+                  letters[10] = true;
+                }
           }
     }
     //  pouce et Finger Middle
@@ -441,6 +468,13 @@ class LettersGestureHandler {
                 {
                   println("H");
                   letters[7] = true;
+                }
+            else if ((angle_thumb >= 85 && angle_thumb <= 120) &&
+                     (angle_middle >= 120 && angle_middle <= 140) &&
+                      distance >=10)
+                {
+                  println("K");
+                  letters[10] = true;
                 }
           }
     }
@@ -560,6 +594,22 @@ class LettersGestureHandler {
                 {
                   println("C");
                   letters[2] = true;
+                }
+          }
+    }
+    
+    // MIDDLE & RING
+    else if (is_middle && is_ring)
+    {
+      if (!is_index &&
+          !is_pinky &&
+          !is_thumb)
+          {
+            if ((angle_middle >= 110 && angle_index <= 125) &&
+                (angle_ring >= 60 && angle_ring <= 80))
+                {
+                  println("H");
+                  letters[7] = true;
                 }
           }
     }

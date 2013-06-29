@@ -264,6 +264,6 @@ void draw() {
 
 void InstantiateGameLetter() {
   difficulty = int(random(88, 90));
-  letters.add(new LetterToSign(int(random(7))));
+  letters.add(new LetterToSign(int(random(8))));
 }
 
