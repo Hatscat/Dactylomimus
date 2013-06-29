@@ -16,7 +16,8 @@ private ArrayList<LetterToSign> letters; // les lettres écrite à signer
 private PXCUPipeline pp; // la bibliothèque du SDK d'Intel
 private LettersGestureHandler gest; // la classe servant à reconnaitre des lettres signées
 private int letterToShow;
-private int seconds;
+private int frame;
+private float difficulty;
 private boolean wait;
 public int scene; // le numéro de la scène : '0' pour le menu, '1' pour l'apprentissage, '2' pour le jeu
 
@@ -24,14 +25,9 @@ public int scene; // le numéro de la scène : '0' pour le menu, '1' pour l'appr
 
 void setup() {
   
-  frameRate(30);
+  frameRate(15);
   size(960, 600);
-  background(255);
-  /*
-  if (frame != null) {
-    frame.setResizable(true); // fenêtre redimensionnable
-  }
-  */
+
   pp = new PXCUPipeline(this); 
   pp.Init(PXCUPipeline.GESTURE);
   
@@ -42,7 +38,7 @@ void setup() {
   gest = new LettersGestureHandler();
   
   letters = new ArrayList<LetterToSign>();
-  letters.add(new LetterToSign(0, 0));
+  letters.add(new LetterToSign(0));
   
   alphabetPicture = loadImage("alphabet_lsf.png");
   letterSignPictures = new PImage[26];
@@ -81,6 +77,8 @@ void setup() {
   letterToShow = 0;
   scene = 0;
   wait = false;
+  difficulty = 64;
+  frame = 0;
   
 }
 
@@ -88,16 +86,13 @@ void setup() {
 
 void draw() {
   
+  background(255);
+  
   PXCMGesture.GeoNode ndata = new PXCMGesture.GeoNode();
   PXCMGesture.Gesture gdata = new PXCMGesture.Gesture();
   
-  LetterToSign letter = letters.get(0);
-  letter.Awake();
-  
-  seconds = second();
-  
   // la camera
-  if (!pp.AcquireFrame(false)) return; // si la camera ne capte rien le programme n'attend pas et la frame s'arrête. (à remplacer par pp.AcquireFrame(true); si l'on souhaite qu'il bloque la frame et attende de capter quelque chose)
+  if (!pp.AcquireFrame(false)) return;
   
   if (pp.QueryLabelMapAsImage(display))
   {
@@ -108,12 +103,15 @@ void draw() {
     
   textAlign(LEFT, TOP);
   
+  gest.OnGesture(); //la reconnaissance du signe
   
   ////////////////////////////////////////////////////////////////// LA SCENE DU MENU //////////////////////////////////////////////////////////////////
   
   if (scene == 0)
   {
-
+    
+    LetterToSign letter = letters.get(0);
+    
     textSize(100);
     
     text("Dactylomimus", 120, 40);
@@ -129,14 +127,14 @@ void draw() {
     {
       if (gdata.label == PXCMGesture.Gesture.LABEL_POSE_THUMB_UP)
       {
-        background(255);
         letterToShow = 0;
         letter.letterNb = 0;
+        frame = 0;
         scene = 1;
       }
       else if (gdata.label == PXCMGesture.Gesture.LABEL_POSE_PEACE)
       {
-        background(255);
+        frame = 0;
         scene = 2;
       }
     }
@@ -145,18 +143,16 @@ void draw() {
     
   } else if (scene == 1)
   {
-    // découpage de la page en 3 parties : à gauche la lettre / le mot / l'expression ; en haut à droite la représentation du signe à reproduire ; et en bas à droite la vidéo gesture
+    LetterToSign letter = letters.get(0);
+    letter.isAwake = false;
+    letter.Awake();
     
-
     // 1 : le texte
     textSize(300);
-    text(letter.letter, 200, 30); //letter.letter
+    text(letter.letter, 200, 30);
     
     // 2 : le signe à reproduire
     image(letterSignPictures[letterToShow], width - (letterSignPictures[letterToShow].width * 1.1), 50);
-    
-    // 4 : la reconnaissance du signe
-    gest.OnGesture(); // cf la classe
     
     if (gest.letters[letterToShow])
     {
@@ -167,17 +163,15 @@ void draw() {
       text("Bravo !", 100, 310);
     }
     
-    if (wait && seconds%3 == 0)
+    if (wait && frame%64 == 0)
     {
       wait = false;
       gest.letters[letterToShow] = false;
       if (letterToShow < 25)
       {
-        letterToShow++;
         letter.letterNb++;
-        background(255);
+        letterToShow++;
       } else {
-        background(255);
         scene = 0;
       }
     }
@@ -186,7 +180,6 @@ void draw() {
     {
       if (gdata.label == PXCMGesture.Gesture.LABEL_POSE_THUMB_DOWN)
       {
-        background(255);
         scene = 0;
       }
     }
@@ -195,13 +188,30 @@ void draw() {
     
   } else if (scene == 2)
   {
+    if (frame%difficulty == 0)
+    {
+      InstantiateGameLetter();
+    }
     
+    for (int i = letters.size()-1; i >= 0; i--) {
+      LetterToSign letterClone = letters.get(i);
+      
+      letterClone.Awake();
+      letterClone.Move();
+      letterClone.Display();
+      
+      if (letterClone.Finished()) {
+        letters.remove(i);
+        println ("die!!!!!!!!!!!!!!!!!!!");
+      }
+      
+    }
     
     if (pp.QueryGesture(PXCMGesture.GeoNode.LABEL_ANY, gdata))
     {
       if (gdata.label == PXCMGesture.Gesture.LABEL_POSE_THUMB_DOWN)
       {
-        background(255);
+        frame = 0;
         scene = 0;
       }
     }
@@ -210,9 +220,13 @@ void draw() {
   //////////////////////////////////////////////////////////////////
   
   pp.ReleaseFrame();
-
+  frame++;
 }
   
   //////////////////////////////////////////////////////////////////
 
+void InstantiateGameLetter() {
+  //difficulty ++;
+  letters.add(new LetterToSign(int(random(7))));
+}
 
