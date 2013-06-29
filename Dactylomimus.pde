@@ -27,7 +27,7 @@ public int highscore;
 
 void setup() {
   
-  frameRate(20);
+  frameRate(15);
   size(960, 600);
 
   pp = new PXCUPipeline(this); 
