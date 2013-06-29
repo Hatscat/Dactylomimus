@@ -172,10 +172,9 @@ void draw() {
       fill (0, 200, 0);
       textSize(150);
       text("Bravo !", 100, 320);
-      if (frame%45 == 0)
+      if (frame%60 == 0)
       {
         wait = false;
-        //gest.letters[letterToShow] = false;
         if (letterToShow < 25)
         {
           letter.letterNb++;
@@ -191,6 +190,15 @@ void draw() {
       if (gdata.label == PXCMGesture.Gesture.LABEL_POSE_THUMB_DOWN)
       {
         scene = 0;
+      } else if (gdata.label == PXCMGesture.Gesture.LABEL_NAV_SWIPE_RIGHT || gdata.label == PXCMGesture.Gesture.LABEL_NAV_SWIPE_LEFT)
+      {
+        if (letterToShow < 25)
+        {
+          letter.letterNb++;
+          letterToShow++;
+        } else {
+          scene = 0;
+        }
       }
     }
       
