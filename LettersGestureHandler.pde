@@ -13,6 +13,8 @@ class LettersGestureHandler {
   
   public String test = "";
   
+  public float distance;
+  
   public void OnGesture() {
     
     for (int i=0, c=letters.length; i<c; i++)
@@ -160,6 +162,9 @@ class LettersGestureHandler {
     if (pp.QueryGeoNode(PXCMGesture.GeoNode.LABEL_BODY_HAND_PRIMARY|PXCMGesture.GeoNode.LABEL_HAND_UPPER, ndata)) { test += ", H-Upper : " + int(angle_hand_upper); }
     if (pp.QueryGeoNode(PXCMGesture.GeoNode.LABEL_BODY_HAND_PRIMARY|PXCMGesture.GeoNode.LABEL_HAND_UPPER, ndata)) { test += ", H-Lower : " + int(angle_hand_lower); }
     
+    distance = sqrt(sq(HAND_UPPER[0] - HAND_MIDDLE[0]) + sq(HAND_UPPER[1] - HAND_MIDDLE[1]));
+    test += ", Dist : " + distance;
+    
     println(test);
     
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -174,36 +179,66 @@ class LettersGestureHandler {
       if (!pp.QueryGeoNode(PXCMGesture.GeoNode.LABEL_BODY_HAND_PRIMARY|PXCMGesture.GeoNode.LABEL_FINGER_INDEX, ndata) &&
           !pp.QueryGeoNode(PXCMGesture.GeoNode.LABEL_BODY_HAND_PRIMARY|PXCMGesture.GeoNode.LABEL_FINGER_MIDDLE, ndata) &&
           !pp.QueryGeoNode(PXCMGesture.GeoNode.LABEL_BODY_HAND_PRIMARY|PXCMGesture.GeoNode.LABEL_FINGER_RING, ndata) &&
-          !pp.QueryGeoNode(PXCMGesture.GeoNode.LABEL_BODY_HAND_PRIMARY|PXCMGesture.GeoNode.LABEL_FINGER_PINKY, ndata) &&
-          angle_thumb >= 0 && angle_thumb <= 22) {
-            println("A");
-            letters[0] = true;
+          !pp.QueryGeoNode(PXCMGesture.GeoNode.LABEL_BODY_HAND_PRIMARY|PXCMGesture.GeoNode.LABEL_FINGER_PINKY, ndata))
+          {
+            if (angle_thumb >= 0 && angle_thumb <= 20)
+            {
+              println("A");
+              letters[0] = true;
+            }
+            // Reconnaissance du D
+            else if (angle_thumb >= 160 && angle_thumb <= 175 &&
+                     distance > 15)
+            {
+              println("D");
+              letters[3] = true;
+            }
           }
     }
     
     // reconnaissance du A (avec Index)
-    if (pp.QueryGeoNode(PXCMGesture.GeoNode.LABEL_BODY_HAND_PRIMARY|PXCMGesture.GeoNode.LABEL_FINGER_INDEX, ndata))
+    else if (pp.QueryGeoNode(PXCMGesture.GeoNode.LABEL_BODY_HAND_PRIMARY|PXCMGesture.GeoNode.LABEL_FINGER_INDEX, ndata))
     {
       if (!pp.QueryGeoNode(PXCMGesture.GeoNode.LABEL_BODY_HAND_PRIMARY|PXCMGesture.GeoNode.LABEL_FINGER_PINKY, ndata) &&
           !pp.QueryGeoNode(PXCMGesture.GeoNode.LABEL_BODY_HAND_PRIMARY|PXCMGesture.GeoNode.LABEL_FINGER_MIDDLE, ndata) &&
           !pp.QueryGeoNode(PXCMGesture.GeoNode.LABEL_BODY_HAND_PRIMARY|PXCMGesture.GeoNode.LABEL_FINGER_RING, ndata) &&
-          !pp.QueryGeoNode(PXCMGesture.GeoNode.LABEL_BODY_HAND_PRIMARY|PXCMGesture.GeoNode.LABEL_FINGER_THUMB, ndata) &&
-          angle_index >= 0 && angle_index <= 22) {
-            println("A");
-            letters[0] = true;
+          !pp.QueryGeoNode(PXCMGesture.GeoNode.LABEL_BODY_HAND_PRIMARY|PXCMGesture.GeoNode.LABEL_FINGER_THUMB, ndata))
+          {
+            if (angle_index >= 0 && angle_index <= 20)
+            {
+              println("A");
+              letters[0] = true;
+            }
+            // Reconnaissance du D
+            else if (angle_index >= 160 && angle_index <= 175 &&
+                     distance > 15)
+            {
+              println("D");
+              letters[3] = true;
+            }
           }
     }
     
     // reconnaissance du A (avec le Pinky)
-    if (pp.QueryGeoNode(PXCMGesture.GeoNode.LABEL_BODY_HAND_PRIMARY|PXCMGesture.GeoNode.LABEL_FINGER_PINKY, ndata))
+    else if (pp.QueryGeoNode(PXCMGesture.GeoNode.LABEL_BODY_HAND_PRIMARY|PXCMGesture.GeoNode.LABEL_FINGER_PINKY, ndata))
     {
       if (!pp.QueryGeoNode(PXCMGesture.GeoNode.LABEL_BODY_HAND_PRIMARY|PXCMGesture.GeoNode.LABEL_FINGER_INDEX, ndata) &&
           !pp.QueryGeoNode(PXCMGesture.GeoNode.LABEL_BODY_HAND_PRIMARY|PXCMGesture.GeoNode.LABEL_FINGER_MIDDLE, ndata) &&
           !pp.QueryGeoNode(PXCMGesture.GeoNode.LABEL_BODY_HAND_PRIMARY|PXCMGesture.GeoNode.LABEL_FINGER_RING, ndata) &&
-          !pp.QueryGeoNode(PXCMGesture.GeoNode.LABEL_BODY_HAND_PRIMARY|PXCMGesture.GeoNode.LABEL_FINGER_THUMB, ndata) &&
-          angle_pinky >= 0 && angle_pinky <= 22) {
-            println("A");
-            letters[0] = true;
+          !pp.QueryGeoNode(PXCMGesture.GeoNode.LABEL_BODY_HAND_PRIMARY|PXCMGesture.GeoNode.LABEL_FINGER_THUMB, ndata))
+          {
+            if (angle_pinky >= 0 && angle_pinky <= 20)
+            {
+              println("A");
+              letters[0] = true;
+            }
+            // Reconnaissance du D
+            else if (angle_pinky >= 160 && angle_pinky <= 175 &&
+                     distance > 15)
+            {
+              println("D");
+              letters[3] = true;
+            }
           }
     }
 
@@ -214,23 +249,29 @@ class LettersGestureHandler {
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     
     // On vérifie que tous les doigts sont bien "fermés"
-    if (!pp.QueryGeoNode(PXCMGesture.GeoNode.LABEL_BODY_HAND_PRIMARY|PXCMGesture.GeoNode.LABEL_FINGER_THUMB, ndata) &&
-          !pp.QueryGeoNode(PXCMGesture.GeoNode.LABEL_BODY_HAND_PRIMARY|PXCMGesture.GeoNode.LABEL_FINGER_INDEX, ndata) &&
-          !pp.QueryGeoNode(PXCMGesture.GeoNode.LABEL_BODY_HAND_PRIMARY|PXCMGesture.GeoNode.LABEL_FINGER_MIDDLE, ndata) &&
-          !pp.QueryGeoNode(PXCMGesture.GeoNode.LABEL_BODY_HAND_PRIMARY|PXCMGesture.GeoNode.LABEL_FINGER_RING, ndata) &&
-          !pp.QueryGeoNode(PXCMGesture.GeoNode.LABEL_BODY_HAND_PRIMARY|PXCMGesture.GeoNode.LABEL_FINGER_PINKY, ndata))
+    /*if (!pp.QueryGeoNode(PXCMGesture.GeoNode.LABEL_BODY_HAND_PRIMARY|PXCMGesture.GeoNode.LABEL_FINGER_THUMB, ndata) &&
+        !pp.QueryGeoNode(PXCMGesture.GeoNode.LABEL_BODY_HAND_PRIMARY|PXCMGesture.GeoNode.LABEL_FINGER_INDEX, ndata) &&
+        !pp.QueryGeoNode(PXCMGesture.GeoNode.LABEL_BODY_HAND_PRIMARY|PXCMGesture.GeoNode.LABEL_FINGER_MIDDLE, ndata) &&
+        !pp.QueryGeoNode(PXCMGesture.GeoNode.LABEL_BODY_HAND_PRIMARY|PXCMGesture.GeoNode.LABEL_FINGER_RING, ndata) &&
+        !pp.QueryGeoNode(PXCMGesture.GeoNode.LABEL_BODY_HAND_PRIMARY|PXCMGesture.GeoNode.LABEL_FINGER_PINKY, ndata))*/
+    if (!pp.QueryGeoNode(PXCMGesture.GeoNode.LABEL_BODY_HAND_PRIMARY|PXCMGesture.GeoNode.LABEL_FINGER_MIDDLE, ndata) &&
+        !pp.QueryGeoNode(PXCMGesture.GeoNode.LABEL_BODY_HAND_PRIMARY|PXCMGesture.GeoNode.LABEL_FINGER_RING, ndata) &&
+        !pp.QueryGeoNode(PXCMGesture.GeoNode.LABEL_BODY_HAND_PRIMARY|PXCMGesture.GeoNode.LABEL_FINGER_PINKY, ndata))
     {
-      if ((angle_hand_upper >= 55 && angle_hand_upper <= 80) &&
-          (angle_hand_lower >= 90 && angle_hand_lower <= 120))
+      if ((angle_hand_upper >= 100 && angle_hand_upper <= 130) &&
+          (angle_hand_lower >= 40 && angle_hand_lower <= 80) &&
+           distance > 25)
           {
             println("B");
             letters[1] = true;
           }
-      else if ((angle_hand_upper >= 100 && angle_hand_upper <= 125) &&
-          (angle_hand_lower >= 45 && angle_hand_lower <= 75))
+      // Reconnaissance du E
+      else if ((angle_hand_upper >= 50 && angle_hand_upper <= 110) &&
+          (angle_hand_lower >= 125 && angle_hand_lower <= 175)&&
+           distance < 15)
           {
-            println("B");
-            letters[1] = true;
+            println("E");
+            letters[4] = true;
           }
     }
 
@@ -246,17 +287,58 @@ class LettersGestureHandler {
     {
       if (!pp.QueryGeoNode(PXCMGesture.GeoNode.LABEL_BODY_HAND_PRIMARY|PXCMGesture.GeoNode.LABEL_FINGER_PINKY, ndata) &&
           !pp.QueryGeoNode(PXCMGesture.GeoNode.LABEL_BODY_HAND_PRIMARY|PXCMGesture.GeoNode.LABEL_FINGER_MIDDLE, ndata) &&
-          !pp.QueryGeoNode(PXCMGesture.GeoNode.LABEL_BODY_HAND_PRIMARY|PXCMGesture.GeoNode.LABEL_FINGER_RING, ndata) &&
-          (angle_thumb >= 115 && angle_thumb <= 145) &&
-          (angle_index >= 25 && angle_index <= 55))
+          !pp.QueryGeoNode(PXCMGesture.GeoNode.LABEL_BODY_HAND_PRIMARY|PXCMGesture.GeoNode.LABEL_FINGER_RING, ndata))
           {
-            println("C");
-            letters[2] = true;
+            if ((angle_thumb >= 115 && angle_thumb <= 145) &&
+                (angle_index >= 25 && angle_index <= 55))
+                {
+                  println("C");
+                  letters[2] = true;
+                }
+            else if ((angle_thumb >= 25 && angle_thumb <= 55) &&
+                (angle_index >= 105 && angle_index <= 135))
+                {
+                  println("C");
+                  letters[2] = true;
+                }
+          }
+    }
+    // reconnaissance du C (avec le pouce et Finger Middle)
+    else if (pp.QueryGeoNode(PXCMGesture.GeoNode.LABEL_BODY_HAND_PRIMARY|PXCMGesture.GeoNode.LABEL_FINGER_THUMB, ndata) &&
+             pp.QueryGeoNode(PXCMGesture.GeoNode.LABEL_BODY_HAND_PRIMARY|PXCMGesture.GeoNode.LABEL_FINGER_MIDDLE, ndata))
+    {
+      if (!pp.QueryGeoNode(PXCMGesture.GeoNode.LABEL_BODY_HAND_PRIMARY|PXCMGesture.GeoNode.LABEL_FINGER_PINKY, ndata) &&
+          !pp.QueryGeoNode(PXCMGesture.GeoNode.LABEL_BODY_HAND_PRIMARY|PXCMGesture.GeoNode.LABEL_FINGER_INDEX, ndata) &&
+          !pp.QueryGeoNode(PXCMGesture.GeoNode.LABEL_BODY_HAND_PRIMARY|PXCMGesture.GeoNode.LABEL_FINGER_RING, ndata))
+          {
+            if ((angle_thumb >= 115 && angle_thumb <= 145) &&
+                (angle_middle >= 25 && angle_middle <= 55))
+                {
+                  println("C");
+                  letters[2] = true;
+                }
+            else if ((angle_thumb >= 25 && angle_thumb <= 55) &&
+                (angle_middle >= 105 && angle_middle <= 135))
+                {
+                  println("C");
+                  letters[2] = true;
+                }
           }
     }
 
-    // reconnaissance du D
-    // reconnaissance du E
+    /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    //
+    // Reconnaissance du D / voir la partie réservée à la lettre A
+    //
+    /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    
+    /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    //
+    // Reconnaissance du E / voir la lettre B
+    //
+    /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    
+    
     // reconnaissance du F
     // reconnaissance du G
     // reconnaissance du H
