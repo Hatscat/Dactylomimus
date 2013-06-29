@@ -187,7 +187,7 @@ class LettersGestureHandler {
               letters[0] = true;
             }
             // Reconnaissance du D
-            else if (angle_thumb >= 160 && angle_thumb <= 175 &&
+            else if (angle_thumb >= 155 && angle_thumb <= 175 &&
                      distance > 15)
             {
               println("D");
@@ -210,11 +210,18 @@ class LettersGestureHandler {
               letters[0] = true;
             }
             // Reconnaissance du D
-            else if (angle_index >= 160 && angle_index <= 175 &&
+            else if (angle_index >= 120 && angle_index <= 170 &&
                      distance > 15)
             {
               println("D");
               letters[3] = true;
+            }
+            // Reconnaissance du G
+            else if (angle_index >= 90 && angle_index <= 120 &&
+                     distance <5)
+            {
+              println("G");
+              letters[6] = true;
             }
           }
     }
@@ -233,7 +240,7 @@ class LettersGestureHandler {
               letters[0] = true;
             }
             // Reconnaissance du D
-            else if (angle_pinky >= 160 && angle_pinky <= 175 &&
+            else if (angle_pinky >= 155 && angle_pinky <= 175 &&
                      distance > 15)
             {
               println("D");
@@ -267,8 +274,8 @@ class LettersGestureHandler {
           }
       // Reconnaissance du E
       else if ((angle_hand_upper >= 50 && angle_hand_upper <= 110) &&
-          (angle_hand_lower >= 125 && angle_hand_lower <= 175)&&
-           distance < 15)
+               (angle_hand_lower >= 125 && angle_hand_lower <= 175)&&
+                distance < 15)
           {
             println("E");
             letters[4] = true;
@@ -301,6 +308,14 @@ class LettersGestureHandler {
                   println("C");
                   letters[2] = true;
                 }
+            // Reconnaissance H
+            else if ((angle_thumb >= 80 && angle_thumb <= 110) &&
+                     (angle_index >= 130 && angle_index <= 160) &&
+                      distance > 30)
+                {
+                  println("H");
+                  letters[7] = true;
+                }
           }
     }
     // reconnaissance du C (avec le pouce et Finger Middle)
@@ -325,7 +340,28 @@ class LettersGestureHandler {
                 }
           }
     }
-
+    // reconnaissance du C (avec le INDEX et Finger Middle)
+    else if (pp.QueryGeoNode(PXCMGesture.GeoNode.LABEL_BODY_HAND_PRIMARY|PXCMGesture.GeoNode.LABEL_FINGER_INDEX, ndata) &&
+             pp.QueryGeoNode(PXCMGesture.GeoNode.LABEL_BODY_HAND_PRIMARY|PXCMGesture.GeoNode.LABEL_FINGER_MIDDLE, ndata))
+    {
+      if (!pp.QueryGeoNode(PXCMGesture.GeoNode.LABEL_BODY_HAND_PRIMARY|PXCMGesture.GeoNode.LABEL_FINGER_PINKY, ndata) &&
+          !pp.QueryGeoNode(PXCMGesture.GeoNode.LABEL_BODY_HAND_PRIMARY|PXCMGesture.GeoNode.LABEL_FINGER_RING, ndata) &&
+          !pp.QueryGeoNode(PXCMGesture.GeoNode.LABEL_BODY_HAND_PRIMARY|PXCMGesture.GeoNode.LABEL_FINGER_THUMB, ndata))
+          {
+            if ((angle_index >= 115 && angle_index <= 145) &&
+                (angle_middle >= 25 && angle_middle <= 55))
+                {
+                  println("C");
+                  letters[2] = true;
+                }
+            else if ((angle_index >= 25 && angle_index <= 55) &&
+                (angle_middle >= 105 && angle_middle <= 135))
+                {
+                  println("C");
+                  letters[2] = true;
+                }
+          }
+    }
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     //
     // Reconnaissance du D / voir la partie réservée à la lettre A
@@ -338,10 +374,45 @@ class LettersGestureHandler {
     //
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     
+    /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    //
+    // Reconnaissance du F
+    //
+    /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    // reconnaissance du F (avec le RING)
+    if (pp.QueryGeoNode(PXCMGesture.GeoNode.LABEL_BODY_HAND_PRIMARY|PXCMGesture.GeoNode.LABEL_FINGER_RING, ndata))
+    {
+      if (!pp.QueryGeoNode(PXCMGesture.GeoNode.LABEL_BODY_HAND_PRIMARY|PXCMGesture.GeoNode.LABEL_FINGER_INDEX, ndata) &&
+          !pp.QueryGeoNode(PXCMGesture.GeoNode.LABEL_BODY_HAND_PRIMARY|PXCMGesture.GeoNode.LABEL_FINGER_MIDDLE, ndata) &&
+          !pp.QueryGeoNode(PXCMGesture.GeoNode.LABEL_BODY_HAND_PRIMARY|PXCMGesture.GeoNode.LABEL_FINGER_PINKY, ndata) &&
+          !pp.QueryGeoNode(PXCMGesture.GeoNode.LABEL_BODY_HAND_PRIMARY|PXCMGesture.GeoNode.LABEL_FINGER_THUMB, ndata))
+          {
+            if (angle_ring >= 90 && angle_ring <= 140)
+            {
+              println("F");
+              letters[5] = true;
+            }
+            else if (angle_ring >= 5 && angle_ring <= 25)
+            {
+              println("G");
+              letters[6] = true;
+            }
+          }
+    }
+
+
+    /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    //
+    // Reconnaissance du G
+    //
+    /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     
-    // reconnaissance du F
-    // reconnaissance du G
-    // reconnaissance du H
+    /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    //
+    // Reconnaissance du H
+    //
+    /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    
     // reconnaissance du I
     // reconnaissance du J
     // reconnaissance du K
