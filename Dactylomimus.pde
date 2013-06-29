@@ -137,7 +137,8 @@ void draw() {
   {
     // découpage de la page en 3 parties : à gauche la lettre / le mot / l'expression ; en haut à droite la représentation du signe à reproduire ; et en bas à droite la vidéo gesture
     
-    LetterToSign letter = letters.get(letterToShow);
+    // LetterToSign letter = letters.get(letterToShow);
+    LetterToSign letter = letters.get(0);
     
     // 1 : le texte
     textSize(300);
