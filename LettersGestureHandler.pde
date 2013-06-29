@@ -224,11 +224,13 @@ class LettersGestureHandler {
           (angle_hand_lower >= 90 && angle_hand_lower <= 120))
           {
             println("B");
+            letters[1] = true;
           }
       else if ((angle_hand_upper >= 100 && angle_hand_upper <= 125) &&
           (angle_hand_lower >= 45 && angle_hand_lower <= 75))
           {
             println("B");
+            letters[1] = true;
           }
     }
 
@@ -249,7 +251,7 @@ class LettersGestureHandler {
           (angle_index >= 25 && angle_index <= 55))
           {
             println("C");
-            letters[0] = true;
+            letters20] = true;
           }
     }
 
