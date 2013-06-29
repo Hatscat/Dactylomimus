@@ -14,12 +14,12 @@ private PImage navigationSignPicture;
 private PImage[] navSignPictures;
 private PImage shapesPicture;
 private PImage[] shapePictures;
-private PImage noiseShapesPict;
-private PImage[] noiseShapePicts;
+//private PImage noiseShapesPict;
+//private PImage[] noiseShapePicts;
 private ArrayList<LetterToSign> letters; // les lettres écrite à signer 
 private PXCUPipeline pp; // la bibliothèque du SDK d'Intel
 private LettersGestureHandler gest; // la classe servant à reconnaitre des lettres signées
-private ShapeRecognition shape;
+//private ShapeRecognition shape;
 private int letterToShow;
 private int frame;
 private float difficulty;
@@ -27,7 +27,10 @@ private boolean wait;
 public int scene; // le numéro de la scène : '0' pour le menu, '1' pour l'apprentissage, '2' pour le jeu
 public int score;
 public int highscore;
-private int correspondenceScore;
+//private int correspondenceScore;
+//private int[] bonusCorrespondenceScore;
+//private int[] malusDarkCorScore;
+//private int[] malusLightCorScore;
 
   //////////////////////////////////////////////////////////////////
 
@@ -44,7 +47,7 @@ void setup() {
   display = createImage(size[0], size[1], RGB);
   
   gest = new LettersGestureHandler();
-  shape = new ShapeRecognition();
+  //shape = new ShapeRecognition();
   
   letters = new ArrayList<LetterToSign>();
   letters.add(new LetterToSign(0));
@@ -99,7 +102,7 @@ void setup() {
     }
     shapePictures[i].updatePixels();
   }
-  
+  /*
   noiseShapesPict = loadImage("alphabet_lsf_shape.png");
   noiseShapePicts = new PImage[26];
   
@@ -116,7 +119,7 @@ void setup() {
     }
     noiseShapePicts[i].updatePixels();
   }
-  
+  */
   letterToShow = 0;
   scene = 0;
   wait = false;
@@ -124,7 +127,12 @@ void setup() {
   frame = 0;
   score = 0;
   highscore = 0;
-  correspondenceScore = 0;
+  
+  //correspondenceScore = 0;
+  
+  //bonusCorrespondenceScore = new int[26];
+  //malusDarkCorScore = new int[26];
+  //malusLightCorScore = new int[26];
   
 }
 
@@ -149,7 +157,7 @@ void draw() {
     
   textAlign(LEFT, TOP);
   
-  //gest.OnGesture(); //la reconnaissance du signe
+  gest.OnGesture(); //la reconnaissance du signe
   
   ////////////////////////////////////////////////////////////////// LA SCENE DU MENU //////////////////////////////////////////////////////////////////
   
@@ -206,24 +214,24 @@ void draw() {
     
     tint(255, 80);
     image(shapePictures[letterToShow], width - display.width , height - display.height);
-    tint(255, 0);
-    image(noiseShapePicts[letterToShow], width - display.width , height - display.height);
+    //tint(255, 0);
+    //image(noiseShapePicts[letterToShow], width - display.width , height - display.height);
     tint(255);
     
   ////////////////////////////////////////////////////////////////// shapePictures
-  
+  /*
     for (int y = 0; y < noiseShapePicts[letterToShow].height; y++) {
       for (int x = 0; x < noiseShapePicts[letterToShow].width; x++) {
         int loc = x + y*noiseShapePicts[letterToShow].width;
         if (display.get(x, y) == noiseShapePicts[letterToShow].pixels[loc])
         {
-          correspondenceScore += 160;
+          correspondenceScore += bonusCorrespondenceScore[letterToShow];
           
         } else if (display.get(x, y) < noiseShapePicts[letterToShow].pixels[loc])
         {
-          correspondenceScore -= 10;
+          correspondenceScore -= malusDarkCorScore[letterToShow];
         } else {
-          correspondenceScore -= 1;
+          correspondenceScore -= malusLightCorScore[letterToShow];
         }
       }
     }
@@ -232,13 +240,13 @@ void draw() {
     {
       wait = true;
     }
-    
+    */
     if (gest.letters[letterToShow])
     {
       wait = true;
     }
     
-    correspondenceScore = 0;
+    //correspondenceScore = 0;
     
     if (wait)
     {    
@@ -337,6 +345,6 @@ void draw() {
 
 void InstantiateGameLetter() {
   difficulty = int(random(88, 90));
-  letters.add(new LetterToSign(int(random(8))));
+  letters.add(new LetterToSign(int(random(11))));
 }
 

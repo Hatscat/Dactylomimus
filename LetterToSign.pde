@@ -126,7 +126,6 @@ class LetterToSign {
     text(this.letter, this.x, this.y);
   }
   
-  
   public boolean Finished () {
    
    if (gest.letters[this.letterNb])
