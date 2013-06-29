@@ -251,7 +251,7 @@ class LettersGestureHandler {
           (angle_index >= 25 && angle_index <= 55))
           {
             println("C");
-            letters20] = true;
+            letters[2] = true;
           }
     }
 
