@@ -8,24 +8,27 @@ This software require :
 import intel.pcsdk.*;
 
 private PImage display; // le rendu de la capture vidéo gestuelle
-private PImage AlphabetPicture; // l'image de base, avec tout les signes de l'alphabet, à découper
+private PImage alphabetPicture; // l'image de base, avec tout les signes de l'alphabet, à découper
 private PImage[] letterSignPictures; // les images représentants les signes correspondants aux lettres de l'alphabet (de 0 à 25), en LSF
+private PImage navigationSignPicture;
+private PImage[] navSignPictures;
 private ArrayList<LetterToSign> letters; // les lettres écrite à signer 
 private PXCUPipeline pp; // la bibliothèque du SDK d'Intel
 private LettersGestureHandler gest; // la classe servant à reconnaitre des lettres signées
+private int letterToShow;
 public int scene; // le numéro de la scène : '0' pour le menu, '1' pour l'apprentissage, '2' pour le jeu
 
   //////////////////////////////////////////////////////////////////
 
 void setup() {
   
-  size(1024, 728);
+  size(960, 600);
   background(255);
-  
+  /*
   if (frame != null) {
     frame.setResizable(true); // fenêtre redimensionnable
   }
-  
+  */
   pp = new PXCUPipeline(this); 
   pp.Init(PXCUPipeline.GESTURE);
   
@@ -38,24 +41,43 @@ void setup() {
   letters = new ArrayList<LetterToSign>();
   letters.add(new LetterToSign(0, 0));
   
-  AlphabetPicture = loadImage("alphabet_lsf.png");
+  alphabetPicture = loadImage("alphabet_lsf.png");
   letterSignPictures = new PImage[26];
   
-  AlphabetPicture.loadPixels();
+  alphabetPicture.loadPixels();
   
   for  (int i = 0, c = letterSignPictures.length; i < c; i++)
   {
-    letterSignPictures[i] = createImage(320, 320, RGB);
+    letterSignPictures[i] = createImage(280, 305, RGB);
     letterSignPictures[i].loadPixels();
     
     for (int i2 = 0, c2 = letterSignPictures[i].pixels.length; i2 < c2; i2++)
     {
-      letterSignPictures[i].pixels[i2] = AlphabetPicture.pixels[i2 + i * (320 * 320)];
+      letterSignPictures[i].pixels[i2] = alphabetPicture.pixels[i2 + i * (280 * 305)];
     }
     letterSignPictures[i].updatePixels();
   }
   
+  navigationSignPicture = loadImage("menu_navigation.png");
+  navSignPictures = new PImage[3];
+  
+  navigationSignPicture.loadPixels();
+  
+  for  (int i = 0, c = navSignPictures.length; i < c; i++)
+  {
+    navSignPictures[i] = createImage(140, 153, RGB);
+    navSignPictures[i].loadPixels();
+    
+    for (int i2 = 0, c2 = navSignPictures[i].pixels.length; i2 < c2; i2++)
+    {
+      navSignPictures[i].pixels[i2] = navigationSignPicture.pixels[i2 + i * (140 * 153)];
+    }
+    navSignPictures[i].updatePixels();
+  }
+  
+  letterToShow = 0;
   scene = 0;
+  
 }
 
   //////////////////////////////////////////////////////////////////
@@ -85,19 +107,21 @@ void draw() {
 
     textSize(100);
     
-    text("Dactylomimus", 100, 50);
+    text("Dactylomimus", 120, 40);
     
     textSize(50);
     
-    text("Apprentissage de l'alphabet", 150, 300);
-    
-    text("Jeu", 150, 400);
+    text("Apprentissage de l'alphabet", 180, 280);
+    image(navSignPictures[0], 20, 230);
+    text("Jeu", 180, 440);
+    image(navSignPictures[2], 20, 380);
     
     if (pp.QueryGesture(PXCMGesture.GeoNode.LABEL_ANY, gdata))
     {
       if (gdata.label == PXCMGesture.Gesture.LABEL_POSE_THUMB_UP)
       {
         background(255);
+        letterToShow = 0;
         scene = 1;
       }
       else if (gdata.label == PXCMGesture.Gesture.LABEL_POSE_PEACE)
@@ -113,21 +137,30 @@ void draw() {
   {
     // découpage de la page en 3 parties : à gauche la lettre / le mot / l'expression ; en haut à droite la représentation du signe à reproduire ; et en bas à droite la vidéo gesture
     
-    LetterToSign letter = letters.get(0);
+    LetterToSign letter = letters.get(letterToShow);
     
     // 1 : le texte
-    textSize(320);
-    
-    text(letter.letter, 50, 150); //letter.letter
+    textSize(300);
+    text(letter.letter, 200, 50); //letter.letter
     
     // 2 : le signe à reproduire
-    image(letterSignPictures[0], width - letterSignPictures[0].width, 0);
-  
+    image(letterSignPictures[letterToShow], width - (letterSignPictures[letterToShow].width * 1.1), 50);
     
     // 4 : la reconnaissance du signe
     gest.OnGesture(); // cf la classe
     
-    if (gest.letters[0]) print("yep!\n");
+    if (gest.letters[letterToShow])
+    {
+      gest.letters[letterToShow] = false;
+      
+      fill (0, 200, 0);
+      textSize(150);
+      text("Bravo !", 100, 200);
+      
+      letterToShow++;
+      
+      print("yep!\n");
+    }
     
     if (pp.QueryGesture(PXCMGesture.GeoNode.LABEL_ANY, gdata))
     {
